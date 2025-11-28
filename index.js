@@ -1,14 +1,19 @@
 const express=require('express');
 const bodyParser=require('body-parser');
 const env=require('dotenv');
-
 const mongoose=require('mongoose');
+const Movie=require('./models/movie.model');
+
 
 env.config();
 const app=express();
 
+
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json);
+
+//APIs 
 app.get('/home',(req,res)=>{
     console.log("Hitting /home");
     return res.json({
@@ -16,6 +21,9 @@ app.get('/home',(req,res)=>{
         message:"Fetched Home"
     });
 });
+
+
+//Starting Server
 app.listen(process.env.PORT, async()=>{
     
     console.log(`Server has started on Port ${process.env.PORT}`);
