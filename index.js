@@ -1,43 +1,37 @@
-const express=require('express');
-const bodyParser=require('body-parser');
-const env=require('dotenv');
-const mongoose=require('mongoose');
-const MovieRoutes=require('./routes/movie.routes');
+require('dotenv').config();
 
-// configuring env
-env.config();
-const app=express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const MovieRoutes = require('./routes/movie.routes');
 
-//using body parser
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json);
+const app = express();
 
-MovieRoutes(app) // invoking movie routes
+// Body parser
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());  // <-- FIXED
 
+// Apply routes
+MovieRoutes(app);
 
-//APIs 
-app.get('/home',(req,res)=>{
-    console.log("Hitting /home");
+// Test route
+app.get('/home', (req, res) => {
     return res.json({
-        success:true,
-        message:"Fetched Home"
+        success: true,
+        message: "Fetched Home"
     });
 });
 
 
 
+// Start server
+app.listen(process.env.PORT, async () => {
+    console.log(`Server running on port ${process.env.PORT}`);
 
-//Starting Server 
-app.listen(process.env.PORT, async()=>{
-    
-    console.log(`Server has started on Port ${process.env.PORT}`);
-    try{
-
+    try {
         await mongoose.connect(process.env.DB_URL);
-        console.log("Successfully connected to mongo");
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.log("MongoDB connection error", err);
     }
-   catch(err){
-    console.log("not able to connect mongo", err);
-   }
-
-})
+});
