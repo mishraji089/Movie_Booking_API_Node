@@ -19,23 +19,14 @@ const successResponseBody={
 const createMovie=async (req,res)=>{
   
 try{
-     const movie=await Movie.create(req.body);
-     return res.status(201).json({
-        success:true,
-        error:{},
-        data:movie,
-        msg:"Successfully created a Movie"
-
-     })
+     const movie=await movieService.createMovie(req.body);
+     successResponseBody.data=movie;
+     successResponseBody.msg="Successfullt created a Movie";
+     return res.status(201).json(successResponseBody);
 }
 catch(err){
     console.log(err);
-    return res.status(500).json({
-        success:true,
-        error:err,
-        data:{},
-        msg:"Something went wrong"
-    });
+    return res.status(500).json(errorResponseBody);
 }
 
 };
@@ -43,33 +34,21 @@ catch(err){
 const deleteMovie=async(req,res)=>{
 
     try{
-        const response=await Movie.deleteOne({
-            _id: req.params.id
-        });
-        return res.status(200).json({
-            success:true,
-            error:{},
-            msg:"Successfully deleted the movie",
-            data:response
-        });
-        
+        const response=await movieService.deleteMovie(req.params.id);
+        successResponseBody.data=movie;
+     successResponseBody.msg="Successfullt Deleted the movie";
+        return res.status(200).json(successResponseBody);
     }
     catch(err){
         console.log(err);
-        return res.status(500).json({
-            success:false,
-            error:err,
-            msg:"Something went wrong",
-            data:{}
-
-        });
+        return res.status(500).json(errorResponseBody);
     }
 };
 
 const getMovie=async (req,res)=>{
 
     try{
-    const response= movieService.getMovieById(req.params.id);
+    const response= await movieService.getMovieById(req.params.id);
     if(response.err){
         errorResponseBody.err=response.err;
         return res.status(response.code).json(errorResponseBody);

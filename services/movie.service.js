@@ -1,8 +1,14 @@
 const Movie=require('../models/movie.model');
 
+const createMovie=async (data)=>{
+
+    const movie=await Movie.create(data);
+    return movie;
+}
+
 const getMovieById=async (id)=>{
 
-    const movie=Movie.findById(id);
+    const movie=await Movie.findById(id);
     if(!movie){
         return{
             err:"No movie found for the corresponding id provided",
@@ -13,4 +19,14 @@ const getMovieById=async (id)=>{
     return movie;
 }
 
-module.exports=getMovieById;
+const deleteMovie=async (id)=>{
+
+    const response=await Movie.findByIdAndDelete(id);
+    return response;
+}
+
+module.exports={
+    getMovieById,
+    createMovie,
+    deleteMovie
+}
