@@ -16,6 +16,19 @@ const successResponseBody={
     success:true
 }
 
+
+const getAllMovies=async (req,res)=>{
+
+try{
+const movie=await Movie.find();
+successResponseBody.data=movie;
+return res.status(200).json(successResponseBody)
+}
+catch(err){
+console.log(err);
+return res.status(500).json(errorResponseBody);
+}
+};
 const createMovie=async (req,res)=>{
   
 try{
@@ -73,6 +86,7 @@ const getMovie=async (req,res)=>{
 module.exports={
     createMovie,
     deleteMovie,
-    getMovie
+    getMovie,
+    getAllMovies
     
 }

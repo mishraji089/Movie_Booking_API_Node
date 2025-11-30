@@ -9,6 +9,8 @@ const routes=(app)=>{
     
     app.get('/mba/api/v1/movies/:id',movieController.getMovie);
 
+    app.get('/mba/api/v1/movies',movieController.getAllMovies);
+
 };
 
 
