@@ -20,7 +20,7 @@ const successResponseBody={
 const getAllMovies=async (req,res)=>{
 
 try{
-const movie=await Movie.find();
+const movie=await movieService.getAllMovies();
 successResponseBody.data=movie;
 return res.status(200).json(successResponseBody)
 }

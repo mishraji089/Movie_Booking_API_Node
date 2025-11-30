@@ -1,5 +1,8 @@
 const Movie=require('../models/movie.model');
-
+const getAllMovies= async ()=>{
+    const movie=await Movie.find();
+    return movie;
+}
 const createMovie=async (data)=>{
 
     const movie=await Movie.create(data);
@@ -28,5 +31,6 @@ const deleteMovie=async (id)=>{
 module.exports={
     getMovieById,
     createMovie,
-    deleteMovie
+    deleteMovie,
+    getAllMovies
 }
