@@ -32,8 +32,13 @@ return res.status(500).json(errorResponseBody);
 const createMovie=async (req,res)=>{
   
 try{
-     const movie=await movieService.createMovie(req.body);
-     successResponseBody.data=movie;
+     const response=await movieService.createMovie(req.body);
+     if(response.err){
+        errorResponseBody.err=response.err;
+        errorResponseBody.msg="Validation failed on few parameters of the request body";
+        return res.status(response.code).json(errorResponseBody);
+     }
+     successResponseBody.data=response;
      successResponseBody.msg="Successfullt created a Movie";
      return res.status(201).json(successResponseBody);
 }
@@ -79,6 +84,27 @@ const getMovie=async (req,res)=>{
     }
 };
 
+const updateMovie=async(req,res)=>{
+
+try{
+const response=await movieService.updateMovie(req.params.id,req.body);
+if(response.err){
+    errorResponseBody.err=response.err;
+    errorResponseBody.msg="The updates that we are trying to apply doesn't validate the schema";
+    return res.status(response.code).json(errorResponseBody);
+}
+successResponseBody.data=response;
+
+return res.status(200).json(successResponseBody);
+}
+catch(err){
+console.log(err);
+errorResponseBody.err=err;
+return res.status(500).json(errorResponseBody);
+
+}
+};
+
 
 
 
@@ -87,6 +113,7 @@ module.exports={
     createMovie,
     deleteMovie,
     getMovie,
-    getAllMovies
+    getAllMovies,
+    updateMovie
     
 }

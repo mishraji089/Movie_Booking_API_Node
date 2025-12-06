@@ -11,6 +11,10 @@ const routes=(app)=>{
 
     app.get('/mba/api/v1/movies',movieController.getAllMovies);
 
+    app.put('/mba/api/v1/movies/:id',movieController.updateMovie);
+
+    app.patch('/mba/api/v1/movies/:id',movieController.updateMovie);
+
 };
 
 

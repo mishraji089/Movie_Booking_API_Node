@@ -4,9 +4,25 @@ const getAllMovies= async ()=>{
     return movie;
 }
 const createMovie=async (data)=>{
+    try{
+        const movie=await Movie.create(data);
+        return movie;
 
-    const movie=await Movie.create(data);
-    return movie;
+    }
+    catch(error){
+        if(error.name == 'ValidationError'){
+            let err={};
+            Object.keys(error.errors).forEach((key)=>{
+                err[key]=error.errors[key].message;
+            });
+            console.log(err);
+            return {err:err, code:422};
+        }
+        else{
+            
+            throw  error;
+        }
+    }
 }
 
 const getMovieById=async (id)=>{
@@ -28,9 +44,34 @@ const deleteMovie=async (id)=>{
     return response;
 }
 
+const updateMovie=async (id,data)=>{
+
+    try{
+        const movie=await Movie.findByIdAndUpdate(id,data,{new:true,runValidators:true});
+        return movie;
+
+    }
+    catch(error){
+if(error.name == 'ValidationError'){
+            let err={};
+            Object.keys(error.errors).forEach((key)=>{
+                err[key]=error.errors[key].message;
+            });
+            console.log(err);
+            return {err:err, code:422};
+        }
+        else{
+            
+            throw  error;
+        }
+    }
+
+}
+
 module.exports={
     getMovieById,
     createMovie,
     deleteMovie,
-    getAllMovies
+    getAllMovies,
+    updateMovie
 }
