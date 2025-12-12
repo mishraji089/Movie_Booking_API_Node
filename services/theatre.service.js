@@ -12,7 +12,7 @@ const createTheatre = async (data) => {
             Object.keys(error.errors).forEach((key) => {
                 err[key] = error.errors[key].message;
             });
-            return {err:err,code:422};
+            return { err: err, code: 422 };
         }
         console.log(err);
         throw err;
