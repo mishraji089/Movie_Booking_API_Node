@@ -4,6 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const MovieRoutes = require('./routes/movie.routes');
+const theatreRoutes=require('./routes/theatre.routes');
+
 
 const app = express();
 
@@ -13,6 +15,7 @@ app.use(bodyParser.json());  // <-- FIXED
 
 // Apply routes
 MovieRoutes(app);
+theatreRoutes(app);
 
 // Test route
 app.get('/home', (req, res) => {

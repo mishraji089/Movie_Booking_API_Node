@@ -79,7 +79,7 @@ const fetchMovies = async (filter) => {
     let movies = await Movie.find(query);
     if (!movies) {
         return {
-            err: "Not able to find the quesry movies",
+            err: "Not able to find the query movies",
             code: 404
         }
     }
