@@ -19,6 +19,11 @@ const create=async (req,res)=>{
 
     try{
      const response=await theatreService.createTheatre(req.body);
+     if(response.err){
+        errorResponseBody.err=response.err;
+        errorResponseBody.msg="Validation failed on few paramters of the request body";
+        return res.status(response.code).json(errorResponseBody);
+     }
      successResponseBody.data=response;
      successResponseBody.msg="Successfully created the theatre";
      return res.status(201).json(successResponseBody);
