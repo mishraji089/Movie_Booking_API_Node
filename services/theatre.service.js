@@ -20,44 +20,65 @@ const createTheatre = async (data) => {
 }
 
 
-const getTheatre=async (id)=>{
+
+
+const getTheatre = async (id) => {
 
     try {
         const response = await Theatre.findById(id);
-    if (!response) {
-        return {
-            err: "No Theatre found for the given id ",
-            code: 404
+        if (!response) {
+            return {
+                err: "No Theatre found for the given id ",
+                code: 404
 
+            }
         }
-    }
-    return response;
+        return response;
 
     } catch (error) {
 
         console.log(error);
         throw error;
-        
+
     }
-     
-    
-    
+
+
+
 }
 
 
-const getAllTheatres= async ()=>{
+const getAllTheatres = async () => {
 
     try {
-        const response =await Theatre.find({});
+        const response = await Theatre.find({});
         return response;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 }
+
+const deleteTheatre = async (id) => {
+
+    try {
+        const response = await Theatre.findByIdAndDelete(id);
+        if(!response){
+            return {
+                err:"No record of a theatre found for the given id",
+                code:404
+            }
+        }
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 
 module.exports = {
     createTheatre,
     getTheatre,
-    getAllTheatres
+    getAllTheatres,
+    deleteTheatre
 };

@@ -26,7 +26,7 @@ const ValidationTheatreCreateRequest = async (req, res, next) => {
     next(); //everything is fine move to the next middleware
 }
 
-
 module.exports = {
     ValidationTheatreCreateRequest
+    
 }
