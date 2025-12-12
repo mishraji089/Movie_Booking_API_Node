@@ -35,6 +35,27 @@ const create = async (req, res) => {
 
     }
 };
+
+
+const getTheatre=async (req,res)=>{
+
+    try {
+        const response=await theatreService.getTheatre(req.params.id);
+        if(response.err){
+            errorResponseBody.err=response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
+
+        successResponseBody.data=response;
+        successResponseBody.msg="Successfully fetched data of the theatre";
+        return res.status(200).json(successResponseBody);
+    } catch (error) {
+        errorResponseBody.err=error;
+        return res.status(500).json(errorResponseBody);
+        
+    }
+};
 module.exports = {
-    create
+    create,
+    getTheatre
 }
