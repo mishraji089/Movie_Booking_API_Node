@@ -110,6 +110,10 @@ const update=async (req,res)=>{
 
     try {
         const response=await theatreService.updateTheatre(req.params.id,req.body);
+        if(response.err){
+            errorResponseBody.err=response.err;
+            return res.status(response.code).json(errorResponseBody);
+        }
         successResponseBody.data=response;
         successResponseBody.msg="Successfully updated the theatre";
         return res.status(200).json(successResponseBody);
