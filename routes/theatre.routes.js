@@ -16,6 +16,8 @@ const routes = (app) => {
         theatreMiddleware.ValidationUpdateMovies,
         theatreController.updateMovies);
 
+    app.patch('/mba/api/v1/theatres/:id',theatreController.update);
+
 }
 
 
