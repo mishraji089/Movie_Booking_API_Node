@@ -50,23 +50,36 @@ const getTheatre = async (id) => {
 const getAllTheatres = async (data) => {
 
     try {
-        let query={};
-        if(data && data.city){
-            query.city=data.city;
+        let query = {};
+        let pagination = {};
+        if (data && data.city) {
+            query.city = data.city;
         }
-        if(data && data.pincode){
-             query.pincode=data.pincode;
+        if (data && data.pincode) {
+            query.pincode = data.pincode;
 
         }
 
-        if(data && data.name){
-            //this checks whether name is present in quesry params or not
-            query.name=data.name;
+        if (data && data.name) {
+            //this checks whether name is present in query params or not
+            query.name = data.name;
         }
-        
-        const response = await Theatre.find(query);
+
+        if (data && data.limit) {
+            pagination.limit = data.limit;
+        }
+
+        if (data && data.skip) {
+
+            let perPage = (data.limit) ? data.limit : 3;
+            pagination.skip = data.skip * perPage;
+        }
+
+
+        const response = await Theatre.find(query, {}, pagination);
         return response;
-    } catch (error) {
+    }
+    catch (error) {
         console.log(error);
         throw error;
     }
@@ -76,10 +89,10 @@ const deleteTheatre = async (id) => {
 
     try {
         const response = await Theatre.findByIdAndDelete(id);
-        if(!response){
+        if (!response) {
             return {
-                err:"No record of a theatre found for the given id",
-                code:404
+                err: "No record of a theatre found for the given id",
+                code: 404
             }
         }
         return response;
