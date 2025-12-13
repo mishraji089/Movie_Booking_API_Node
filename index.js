@@ -17,15 +17,6 @@ app.use(bodyParser.json());  // <-- FIXED
 MovieRoutes(app);
 theatreRoutes(app);
 
-// Test route
-app.get('/home', (req, res) => {
-    return res.json({
-        success: true,
-        message: "Fetched Home"
-    });
-});
-
-
 
 // Start server
 app.listen(process.env.PORT, async () => {
