@@ -1,5 +1,5 @@
 const Theatre = require('../models/theatre.model');
-const Movie=require('../models/movie.model')
+const Movie = require('../models/movie.model')
 const createTheatre = async (data) => {
     try {
         const response = await Theatre.create(data);
@@ -65,9 +65,9 @@ const getAllTheatres = async (data) => {
             query.name = data.name;
         }
 
-        if(data && data.movieId){
+        if (data && data.movieId) {
             // let movie =await Movie.findById(data.movieId);
-            query.movies={$all:data.movieId};
+            query.movies = { $all: data.movieId };
         }
         if (data && data.limit) {
             pagination.limit = data.limit;
@@ -129,16 +129,16 @@ const updateMoviesInTheatres = async (theatreId, movieIds, insert) => {
 
         return theatre.populate('movies');
     }
-    catch(error){
-       if(error.name=='TypeError'){
-        return{
-            code:404,
-            err:"No theatre found for the given id"
+    catch (error) {
+        if (error.name == 'TypeError') {
+            return {
+                code: 404,
+                err: "No theatre found for the given id"
+            }
         }
-       }
-       console.log("Error is", error);
-       throw error;
-       
+        console.log("Error is", error);
+        throw error;
+
 
     }
 
@@ -175,22 +175,42 @@ const updateTheatre = async (id, data) => {
 };
 
 
-const getMoviesInATheatre=async (id)=>{
-try{
-const theatre=await Theatre.findById(id,{name:1,movies:1,address:1}).populate('movies');
-if(!theatre){
-    return{
-        err:"No theatre with the given id found",
-        code:404
+const getMoviesInATheatre = async (id) => {
+    try {
+        const theatre = await Theatre.findById(id, { name: 1, movies: 1, address: 1 }).populate('movies');
+        if (!theatre) {
+            return {
+                err: "No theatre with the given id found",
+                code: 404
+            }
+        }
+        return theatre;
     }
-}
-return theatre;
-}
-catch(error){
+    catch (error) {
+        console.log(error);
+        throw error;
+
+
+    }
+
+};
+
+const checkMovieInATheatre=async (theatreId,movieId)=>{
+
+try {
+    let response=await Theatre.findById(theatreId);
+    if(!response){
+        return{
+            err:"No such theatre found for the given id",
+            code:404
+        }
+    }
+    return response.movies.indexOf(movieId) != -1;
+
+} 
+catch (error) {
     console.log(error);
-  throw error;
-
-
+    throw error;
 }
 
 };
@@ -205,5 +225,6 @@ module.exports = {
     deleteTheatre,
     updateMoviesInTheatres,
     updateTheatre,
-    getMoviesInATheatre
+    getMoviesInATheatre,
+    checkMovieInATheatre
 };
