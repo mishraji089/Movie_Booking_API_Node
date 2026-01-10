@@ -1,23 +1,38 @@
-const User=require('../models/user.model');
-
-const createUser=async (data)=>{
+const User = require('../models/user.model');
+const { USER_ROLE, USER_STATUS } = require('../utils/constants');
+const createUser = async (data) => {
     try {
-        const response =await User.create(data);
+
+        if(data.userRole != USER_ROLE.customer && data.userRole!=USER_ROLE.admin && data.userRole!=USER_ROLE.client)
+        if (!data.userRole || data.userRole == USER_ROLE.customer) {
+            if (data.userStatus || data.userStatus != USER_STATUS.approved) {
+                throw {
+                    err: "We cannot set any other status for the customer",
+                    code: 404
+                };
+            }
+        }
+        if (data.userRole && data.userRole != USER_ROLE.customer) {
+            data.userStatus = USER_STATUS.pending;
+        }
+        
+        const response = await User.create(data);
+        console.log(response);
         return response;
     } catch (error) {
         console.log(error);
-        if(error.name=='ValidationError'){
-            let err={};
-            Object.keys(error.errors).forEach((key)=>{
+        if (error.name == 'ValidationError') {
+            let err = {};
+            Object.keys(error.errors).forEach((key) => {
 
-                err[key]=error.errors[key].message;
+                err[key] = error.errors[key].message;
             });
-            throw {err:err,code:422};
+            throw { err: err, code: 422 };
         }
         throw error;
     }
 }
 
-module.exports={
-   createUser
+module.exports = {
+    createUser
 }
