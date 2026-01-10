@@ -5,7 +5,7 @@ const createUser = async (data) => {
 
         if(data.userRole != USER_ROLE.customer && data.userRole!=USER_ROLE.admin && data.userRole!=USER_ROLE.client)
         if (!data.userRole || data.userRole == USER_ROLE.customer) {
-            if (data.userStatus || data.userStatus != USER_STATUS.approved) {
+            if (data.userStatus && data.userStatus != USER_STATUS.approved) {
                 throw {
                     err: "We cannot set any other status for the customer",
                     code: 404
@@ -33,6 +33,24 @@ const createUser = async (data) => {
     }
 }
 
+const getUserByemail=async (email)=>{
+    try {
+        const response= await User.findOne({
+            email:email
+        });
+        if(!response){
+            throw {
+                err:"No user found for the given email", code:404
+            };
+        }
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports = {
-    createUser
+    createUser,
+    getUserByemail
 }
