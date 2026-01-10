@@ -4,7 +4,11 @@ const routes=(app) =>{
 
     app.post('/mba/api/v1/auth/signup',
         authMiddleware.validateSignupRequest,
-        authController.signup)
+        authController.signup);
+
+    app.post('/mba/api/v1/auth/signin',
+        
+    )
 }
 
 module.exports=routes;

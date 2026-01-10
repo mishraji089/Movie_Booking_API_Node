@@ -1,58 +1,62 @@
 const mongoose = require('mongoose');
-const bcrypt=require('bcrypt');
-const {USER_ROLE,USER_STATUS} =require('../utils/constants')
+const bcrypt = require('bcrypt');
+const { USER_ROLE, USER_STATUS } = require('../utils/constants')
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique:true
+        unique: true
     },
 
     email: {
         type: String,
         required: true,
-        unique:true,
-        match:[/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/ ,'please fill a valid email'],
-        lowercase:true,
-        trim:true
+        unique: true,
+        match: [/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/, 'please fill a valid email'],
+        lowercase: true,
+        trim: true
 
     },
 
     password: {
         type: String,
         required: true,
-        minLength:6
+        minLength: 6
     },
 
-    userRole:{
-        type:String,
-        required:true,
-        enum:{
-            values:[USER_ROLE.customer,USER_ROLE.admin,USER_ROLE.client],
-            message:"Invalid user role given"
+    userRole: {
+        type: String,
+        required: true,
+        enum: {
+            values: [USER_ROLE.customer, USER_ROLE.admin, USER_ROLE.client],
+            message: "Invalid user role given"
         },
-        default:USER_ROLE.customer
+        default: USER_ROLE.customer
     },
 
-    userStatus:{
-        type:String,
-        required:true,
-        enum:{
-            values:[USER_STATUS.approved,USER_STATUS.pending,USER_STATUS.rejected],
-            message:"Invalid status for user given"
+    userStatus: {
+        type: String,
+        required: true,
+        enum: {
+            values: [USER_STATUS.approved, USER_STATUS.pending, USER_STATUS.rejected],
+            message: "Invalid status for user given"
         },
-        default:USER_STATUS.approved
-    }
+        default: USER_STATUS.approved
+    }   
 
-
-
-},{timestamps:true});
+}, { timestamps: true });
 
 userSchema.pre('save', async function () {
     const hash = await bcrypt.hash(this.password, 10);
     this.password = hash;
 });
 
+userSchema.methods.isValidPassword=async (plainPassword)=>{
+const currentUser=this;
+const compare=await bcrypt.compare(plainPassword,currentUser.password);
+return compare;
+
+}
 
 const User = mongoose.model('User', userSchema);
 
