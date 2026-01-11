@@ -7,6 +7,7 @@ const routes=(app) =>{
         authController.signup);
 
     app.post('/mba/api/v1/auth/signin',
+        authMiddleware.validateSigninRequest,
         authController.signin);
         
     

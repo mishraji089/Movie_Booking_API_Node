@@ -1,10 +1,5 @@
 
-const errorResponseBody = {
-    err: {},
-    data: {},
-    msg: "Something went wrong, cannot process the request",
-    success: false
-}
+const errorResponseBody=require('../utils/Response');
 
 const validateSignupRequest= async (req,res,next)=>{
 
@@ -24,6 +19,29 @@ const validateSignupRequest= async (req,res,next)=>{
     next();
 }
 
+
+const validateSigninRequest=async (req,res,next)=>{
+   
+    //validate user email presence
+    if(!req.body.email){
+        errorResponseBody.err="No email provided for sign in";
+        return res.status(400).json(errorResponseBody);
+
+    }
+    if(!req.body.password){
+        errorResponseBody.err="No password provided for sign in";
+        return res.status(400).json(errorResponseBody);
+
+    }
+
+    // the request is valid
+
+    next();
+    
+
+}
+
 module.exports={
-    validateSignupRequest
+    validateSignupRequest,
+    validateSigninRequest
 }
